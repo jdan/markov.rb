@@ -24,10 +24,12 @@ $ ruby main.rb -n 4 -c 10 < names.txt
 [existing] Quentina
 ```
 
-Experimental: Output to an [X-State](https://xstate.js.org/docs/) state-machine
+#### Experimental
 
-```$ ruby main.rb -x < names-top10.txt > state.js
+Output to an [X-State](https://xstate.js.org/docs/) state-machine:
 
+```
+$ ruby main.rb -x < names-top10.txt > state.js
 ```
 
 https://xstate.js.org/viz/?gist=91030bd79939c8bc7192e8f27293861c
