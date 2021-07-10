@@ -23,6 +23,14 @@ $ ruby main.rb -n 4 -c 10
 [existing] Quentina
 ```
 
+### how it works
+
+We input a list of names ([names.txt](/blob/main/names.txt)) and for each name, split it into a list [n-grams](https://en.wikipedia.org/wiki/N-gram). For example: (Jordan, 4) => START -> Jord -> orda -> rdan -> END. We can combine two of these "chains" such as START => [Jord, Jack], Jord => [orda], Jack => [acks], ... to build a [state machine](https://en.wikipedia.org/wiki/Finite-state_machine).
+
+Once the state machine is built, we begin at START and _randomly_ choose a path to take (i.e. START -> "Jord" or "Jack"). Interesting things happen when our list has _shared n-grams_ (for example: "Michael" and "Richard" both contain the "icha" 4-gram).
+
+With a sufficiently large input size ("All first names with frequency at least 5 in the United States in 1984") and the right n-gram size (2 seems to produce fairly alien names while 4 produces realistic names without too many existing ones), we can generate a list of names that could pass for the real thing.
+
 ### credits
 
 Jordan Ellenberg's [Shape](https://amzn.to/3yKptm0) has a fantastic section on Markov chains that inspired this.
