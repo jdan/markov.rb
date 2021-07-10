@@ -25,7 +25,7 @@ $ ruby main.rb -n 4 -c 10
 
 ### how it works
 
-We input a list of names ([names.txt](/blob/main/names.txt)) and for each name, split it into a list [n-grams](https://en.wikipedia.org/wiki/N-gram). For example: (Jordan, 4) => START -> Jord -> orda -> rdan -> END. We can combine two of these "chains" such as START => [Jord, Jack], Jord => [orda], Jack => [acks], ... to build a [state machine](https://en.wikipedia.org/wiki/Finite-state_machine).
+We input a list of names ([names.txt](/names.txt)) and for each name, split it into a list [n-grams](https://en.wikipedia.org/wiki/N-gram). For example: (Jordan, 4) => START -> Jord -> orda -> rdan -> END. We can combine two of these "chains" such as START => [Jord, Jack], Jord => [orda], Jack => [acks], ... to build a [state machine](https://en.wikipedia.org/wiki/Finite-state_machine).
 
 Once the state machine is built, we begin at START and _randomly_ choose a path to take (i.e. START -> "Jord" or "Jack"). Interesting things happen when our list has _shared n-grams_ (for example: "Michael" and "Richard" both contain the "icha" 4-gram).
 
