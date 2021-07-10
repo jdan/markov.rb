@@ -10,7 +10,7 @@ $ ruby main.rb --help
 Usage: main.rb [options]
     -n, --ngram-length=N             Number of characters to scan when building n-grams
     -c, --count=COUNT                Number of names to generate
-$ ruby main.rb -n 4 -c 10
+$ ruby main.rb -n 4 -c 10 < names.txt
 [new] Kenne
 [new] Wellina
 [new] Dontavia

@@ -47,9 +47,6 @@ class Markov
   end
 end
 
-# All first names with frequency at least 5 in the United States in 1984
-names = File.read("names.txt").strip.lines.map &:chomp
-
 options = {
   n: 3,
   count: 5
@@ -67,6 +64,7 @@ OptionParser.new do |opts|
   end
 end.parse!
 
+names = STDIN.read.strip.lines.map &:chomp
 m = Markov.new(options[:n])
 names.each do |name|
   m.digest(name)
