@@ -10,6 +10,7 @@ $ ruby main.rb --help
 Usage: main.rb [options]
     -n, --ngram-length=N             Number of characters to scan when building n-grams
     -c, --count=COUNT                Number of names to generate
+    -x, --xstate                     Output an X-State machine definition
 $ ruby main.rb -n 4 -c 10 < names.txt
 [new] Kenne
 [new] Wellina
@@ -22,6 +23,14 @@ $ ruby main.rb -n 4 -c 10 < names.txt
 [new] Corenea
 [existing] Quentina
 ```
+
+Experimental: Output to an [X-State](https://xstate.js.org/docs/) state-machine
+
+```$ ruby main.rb -x < names-top10.txt > state.js
+
+```
+
+https://xstate.js.org/viz/?gist=91030bd79939c8bc7192e8f27293861c
 
 ### how it works
 

@@ -39,11 +39,50 @@ class Markov
     end
   end
 
+  def to_xstate
+    states = @chain.map do |k, v|
+      transitions = v.tally.map do |gram, count|
+        ["#{count.to_f / v.length}-#{gram}", gram]
+      end
+
+      [k, transitions]
+    end
+
+    # TODO: Prettier or something
+    <<~XSTATE
+      const machine = Machine({
+        id: 'machine',
+        initial: 'start',
+        states: {
+          #{states.map { |s| state_to_json(s) }.join("\n")}
+          end: {
+            type: "final"
+          }
+        }
+      });
+    XSTATE
+  end
+
   private
   # lol, 2 => [lo, ol]
   # hello, 3 => [hel, ell, llo]
   def ngram(str, n)
     str.chars.each_cons(n).to_a.map &:join
+  end
+
+  def state_to_json(state)
+    id, transitions = state
+    transitions_json = transitions.map do |t|
+      %Q("#{t[0]}": "#{t[1]}",)
+    end
+
+    <<-JSON
+      #{id}: {
+        on: {
+          #{transitions_json.join("\n")}
+        }
+      },
+    JSON
   end
 end
 
@@ -62,6 +101,10 @@ OptionParser.new do |opts|
   opts.on("-cCOUNT", "--count=COUNT", "Number of names to generate") do |count|
     options[:count] = count.to_i
   end
+
+  opts.on("-x", "--xstate", "Output an X-State machine definition") do |x|
+    options[:x] = x
+  end
 end.parse!
 
 names = STDIN.read.strip.lines.map &:chomp
@@ -70,13 +113,17 @@ names.each do |name|
   m.digest(name)
 end
 
-options[:count].times do
-  name = m.generate
-  if names.include? name
-    status = "existing".red
-  else
-    status = "new".green
-  end
+if options[:x]
+  puts m.to_xstate
+else
+  options[:count].times do
+    name = m.generate
+    if names.include? name
+      status = "existing".red
+    else
+      status = "new".green
+    end
 
-  puts "[#{status}] #{name}"
+    puts "[#{status}] #{name}"
+  end
 end
