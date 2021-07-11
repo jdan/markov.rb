@@ -11,6 +11,7 @@ Usage: main.rb [options]
     -n, --ngram-length=N             Number of characters to scan when building n-grams
     -c, --count=COUNT                Number of names to generate
     -x, --xstate                     Output an X-State machine definition
+    -w, --word                       Separate text into words, rather than characters
 $ ruby main.rb -n 4 -c 10 < names.txt
 [new] Kenne
 [new] Wellina
@@ -22,6 +23,8 @@ $ ruby main.rb -n 4 -c 10 < names.txt
 [existing] Tonny
 [new] Corenea
 [existing] Quentina
+$ ruby main.rb -n 1 -w -c 1 < decl.txt
+We, therefore, acquiesce in the same Object evinces a right do.
 ```
 
 #### Experimental

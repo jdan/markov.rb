@@ -86,6 +86,44 @@ class Markov
   end
 end
 
+class SentenceMarkov < Markov
+  def ngram(str, n)
+    str.split.each_cons(n).to_a
+  end
+
+  def digest(str)
+    gram = ngram(str, @n)
+    curr = :start
+
+    (gram + [:end]).each do |item|
+      # Prevent empty names
+      # TODO: Is this necessary...? Names like "Amy" cause this to happen
+      unless curr == :start && item == :end
+        @chain[curr] << item
+      end
+
+      curr = item
+    end
+  end
+
+  def generate
+    curr = :start
+    result = []
+    loop do
+      curr = @chain[curr].sample
+      if curr == :end
+        break
+      else
+        # drop `@n - 1` chars from the end before adding curr
+        # (i.e. hel + ell => hell)
+        result = result[0..-@n] + curr
+      end
+    end
+
+    result.join(" ") + "."
+  end
+end
+
 options = {
   n: 3,
   count: 5
@@ -105,16 +143,31 @@ OptionParser.new do |opts|
   opts.on("-x", "--xstate", "Output an X-State machine definition") do |x|
     options[:x] = x
   end
+
+  opts.on("-w", "--word", "Separate text into words, rather than characters") do |w|
+    options[:w] = w
+  end
 end.parse!
 
-names = STDIN.read.strip.lines.map &:chomp
-m = Markov.new(options[:n])
-names.each do |name|
-  m.digest(name)
+if options[:w]
+  m = SentenceMarkov.new(options[:n])
+  STDIN.read.split(".").each do |sentence|
+    m.digest(sentence)
+  end
+else
+  m = Markov.new(options[:n])
+  names = STDIN.read.split.map &:chomp
+  names.each do |name|
+    m.digest(name)
+  end
 end
 
 if options[:x]
   puts m.to_xstate
+elsif options[:w]
+  options[:count].times do
+    puts m.generate
+  end
 else
   options[:count].times do
     name = m.generate
